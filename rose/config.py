@@ -11,5 +11,3 @@ BACKEND_DIR = BASE_DIR.joinpath("backend").resolve()
 DATA_DIR  = BASE_DIR.joinpath("data").resolve()
 DOC_DIR   = BASE_DIR.joinpath("docs").resolve()
 TMP_DIR   = BASE_DIR.joinpath("tmp").resolve()
-
-ASSET_DIR_R = ASSET_DIR.relative_to(Path.cwd())

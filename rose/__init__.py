@@ -14,6 +14,4 @@ from .config import (
     DATA_DIR,
     DOC_DIR,
     TMP_DIR,
-
-    ASSET_DIR_R,
 )
