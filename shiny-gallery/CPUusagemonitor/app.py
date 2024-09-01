@@ -1,15 +1,31 @@
+# import sys
+# if "pyodide" in sys.modules:
+#     # psutil doesn't work on pyodide--use fake data instead
+#     from fakepsutil import cpu_count, cpu_percent
+# else:
+#     from psutil import cpu_count, cpu_percent
+
 import sys
+# psutil: 시스템 및 프로세스 유틸리티 라이브러리
+#        시스템 정보(CPU, 메모리, 디스크, 네트워크 등)를 제공하는 Python 모듈
+# pyodide: 웹 브라우저에서 Python 코드를 실행할 수 있게 해주는 프로젝트
+#        이는 WebAssembly를 사용하여 Python 인터프리터를 브라우저에서 실행할 수 있게 합니다.
+# psutil은 pyodide환경에서 작동하지 않습니다.
+# 이는 psutil이 시스템 호출을 사용하여 시스템 정보를 수집하는데,
+# 브라우저 환경에서는 이러한 시스템 호출이 지원되지 않기 때문에 pyodide 환경에서는
+# psutil 대신 fakepsutil이라는 모듈을 사용하여 가짜 데이터를 사용합니다.
 
 if "pyodide" in sys.modules:
-    # psutil doesn't work on pyodide--use fake data instead
     from fakepsutil import cpu_count, cpu_percent
 else:
     from psutil import cpu_count, cpu_percent
+
 
 import matplotlib
 import numpy as np
 import pandas as pd
 from helpers import plot_cpu
+
 from shiny import reactive
 from shiny.express import input, output, render, ui
 

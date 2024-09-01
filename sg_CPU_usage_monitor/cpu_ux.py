@@ -4,6 +4,7 @@ from rose import DATA_DIR
 from rose.log import logger
 logger.info("c_ui start")
 
+
 cpu_ui = ui.layout_sidebar(
     ui.sidebar(
         ## todo
