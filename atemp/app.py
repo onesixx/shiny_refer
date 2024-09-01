@@ -16,9 +16,9 @@ from dlog_srvr import dlog_server
 from database_ux import db_ui
 from database_srvr import db_server
 
+from rose import ASSET_DIR
 from rose.log import logger
 logger.info("App Start")
-from rose import ASSET_DIR
 
 app_ui = ui.page_navbar(
     ui.head_content(
@@ -37,7 +37,7 @@ app_ui = ui.page_navbar(
         ui.nav_control(ui.a("shiny", href="https://shiny.posit.co/py/", target="_blank")),
         align="right",
     ),
-    ui.nav_control(ui.input_dark_mode(id="dark_mode", mode="light")),
+    # ui.nav_control(ui.input_dark_mode(id="dark_mode", mode="light")),
     theme= ASSET_DIR.joinpath("my_theme.css"),
     title = ui.tags.img(src='imgs/apptitle.png', alt='App Title Image', style="height:2rem;"),
     id = "menus",

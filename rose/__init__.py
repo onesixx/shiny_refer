@@ -1,5 +1,5 @@
 from rose.log import setup_logging
-setup_logging('atemp_app.log')
+setup_logging('app_all.log')
 
 from rose.log import logger
 logger.info("Let's go, rose!!")

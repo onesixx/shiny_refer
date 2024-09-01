@@ -67,7 +67,6 @@ def bas_server(input: Inputs, output: Outputs, session: Session):
     @reactive.effect
     @reactive.event(input.bas_btn_info)
     def _():
-        logger.info("Button clicked")
         msg = """
             <ul>
                 <li>following a successful audition in 2012</li>

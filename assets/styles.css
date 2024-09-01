@@ -1,6 +1,9 @@
 /* .card-header {
     background: red;
 } */
+.navbar {
+    padding-left: 1rem;
+}
 
 /* font (xx-small<x-small<small<medium<large<x-large<xx-large, larger<smaller, None)*/
 .btn-close {
