@@ -1,0 +1,14 @@
+shiny >= 1.0.0
+pandas
+
+matplotlib
+faicons
+seaborn
+ipywidgets
+Jinja2
+shinywidgets
+
+altair
+plotly
+
+scikit-learn
