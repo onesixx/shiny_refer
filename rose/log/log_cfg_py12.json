@@ -27,14 +27,21 @@
             "maxBytes": 10240,
             "backupCount": 16,
             "encoding": "utf8"
+        },
+        "queue_handler": {
+            "class": "logging.handlers.QueueHandler",
+            "handlers": [
+                "stdout",
+                "file"
+            ],
+            "respect_handler_level": true
         }
     },
     "loggers": {
         "root": {
             "level": "DEBUG",
             "handlers": [
-                "stdout",
-                "file"
+                "queue_handler"
             ]
         }
     }

@@ -10,7 +10,8 @@ import os
 from pathlib import Path
 from rose.config import BASE_DIR
 
-logger = logging.getLogger("sixx_log_app")
+# Use my own logger , not the root logger
+logger = logging.getLogger("sixx_logger")
 
 def setup_logging(log_filename: str = 'app.log'):
     curr_dir = os.path.dirname(__file__)
@@ -25,8 +26,8 @@ def setup_logging(log_filename: str = 'app.log'):
 
     logging.config.dictConfig(config)
 
-    # Queue Handler for Non-blocking Logging
-    queue_handler = logging.getHandlerByName("queue_handler")
-    if queue_handler is not None:
-        queue_handler.listener.start()
-        atexit.register(queue_handler.listener.stop)
+    #Queue Handler for Non-blocking Logging
+    # queue_handler = logging.getHandlerByName("queue_handler")
+    # if queue_handler is not None:
+    #     queue_handler.listener.start()
+    #     atexit.register(queue_handler.listener.stop)

@@ -17,6 +17,14 @@ app_ui = ui.page_navbar(
         ui.tags.meta(name="viewport", content="width=device-width, initial-scale=1"),
         ui.include_css(Path("assets")/"styles.css"),
     ),
+    # ui.tags.style(
+    #     """
+    #     /* Don't apply fade effect, it's constantly recalculating */
+    #     .recalculating {
+    #         opacity: 1;
+    #     }
+    #     """
+    # ),
     ui.nav_panel("Menu1", cpu_ui),
     ui.nav_spacer(), #---
     ui.nav_menu("Links",
@@ -25,7 +33,6 @@ app_ui = ui.page_navbar(
         ui.nav_control(ui.a("shiny", href="https://shiny.posit.co/py/", target="_blank")),
         align="right",
     ),
-    # ui.nav_control(ui.input_dark_mode(id="dark_mode", mode="light")),
     theme= ASSET_DIR.joinpath("my_theme.css"),
     title = ui.tags.img(src='imgs/apptitle.png', alt='App Title Image', style="height:2rem;"),
     id = "Menu1",

@@ -1,9 +1,14 @@
 """Generates synthetic data"""
+
 import numpy as np
+
 
 def cpu_count(logical: bool = True):
     return 8 if logical else 4
+
+
 last_sample = np.random.uniform(0, 100, size=cpu_count(True))
+
 
 def cpu_percent(interval=None, percpu=False):
     global last_sample
