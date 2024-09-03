@@ -12,7 +12,18 @@ from rose import DATA_DIR
 ### ------  Append the project root directory to sys.path ------
 project_root = Path(__file__).resolve().parent.parent
 sys.path.append(str(project_root))
+#=================================================================
 
+conn = duckdb.connect(str(DATA_DIR.joinpath("db/budadb")), read_only=False)
+conn.execute("""
+    CREATE TABLE daily(date DATE, name VARCHAR, saved BOOLEAN, UNIQUE(date, name));
+""")
+conn.query("""
+    SELECT * FROM daily ORDER BY date;
+""").to_df()
+conn.close()
+
+#=================================================================
 ### ------ Create database of DuckDB ------
 db_file = DATA_DIR.joinpath("db/job.db")
 # db_file = DATA_DIR.joinpath("db/csv.db")
