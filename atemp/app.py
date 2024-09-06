@@ -48,6 +48,6 @@ def server(input: Inputs, output: Outputs, session: Session):
     bas_server(input, output, session)
     my_server(input, output, session)
     db_server(input, output, session)
-    #dlog_ui(input, output, session)
+    dlog_server(input, output, session)
 
 app = App(app_ui, server, static_assets= ASSET_DIR)

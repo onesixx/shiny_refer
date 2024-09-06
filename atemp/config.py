@@ -1,0 +1,1 @@
+AREA_LIST = ['Area_A', 'Area_B', 'Area_C', 'Area_D']

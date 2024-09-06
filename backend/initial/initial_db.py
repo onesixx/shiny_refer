@@ -14,7 +14,7 @@ project_root = Path(__file__).resolve().parent.parent
 sys.path.append(str(project_root))
 #=================================================================
 
-conn = duckdb.connect(str(DATA_DIR.joinpath("db/budadb")), read_only=False)
+conn = duckdb.connect(str(DATA_DIR.joinpath("db/buda.db")), read_only=False)
 conn.execute("""
     CREATE TABLE daily(date DATE, name VARCHAR, saved BOOLEAN, UNIQUE(date, name));
 """)
