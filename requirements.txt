@@ -12,3 +12,5 @@ altair
 plotly
 
 scikit-learn
+pyarrow
+fastparquet

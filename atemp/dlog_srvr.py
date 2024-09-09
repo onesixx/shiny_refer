@@ -117,6 +117,7 @@ def dlog_server(input, output, session):
     @reactive.calc
     def bpro_loadData():
         alldata = bpro_loadData_all()
+        logger.info(f"alldata : {alldata}")
         selected_area = input.log_sel_area()
         ### ------ dt_compact ------ ###
         df_dt_compact = alldata[selected_area+'_dt_compact'] \
@@ -168,13 +169,15 @@ def dlog_server(input, output, session):
                 # style=style
             )
 
-        @output
-        @render.text
-        def bpro_tbl_dt_compact_nodata_msg():
-            df_dt_compact = bpro_loadData()[0]
+    @output
+    @render.text
+    def bpro_tbl_dt_compact_nodata_msg():
+        df_dt_compact = bpro_loadData()[0]
+        logger.info(f"df_dt_compact : {df_dt_compact.shape}")
+        if df_dt_compact.empty or df_dt_compact is None:
+            return "No data available"
+        return ""
 
-            logger.info(f"df_dt_compact : {df_dt_compact.shape}")
-            return "No data available" if df_dt_compact.empty or df_dt_compact is None else ""
 
     # @render.ui
     # def bpro_tbl_ds_facility_rate():
