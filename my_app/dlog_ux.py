@@ -27,17 +27,18 @@ dlog_ui = ui.layout_sidebar(
         ###### ------ Process ------ ######
         ui.nav_panel("Process",
             ui.layout_columns(
-                ui.value_box("AAA", ui.output_ui("bpro_tbl_AAA"), showcase=dollar),
-                ui.value_box("BBB", ui.output_ui("bpro_tbl_BBB"), showcase=biztime),
-                ui.value_box("CCC", ui.output_ui("bpro_tbl_CCC"), showcase=wrench),
+                ui.value_box("Assined Rate", ui.output_ui("bpro_tbl_AAA"), showcase=dollar),
+                ui.value_box("Average Duration", ui.output_ui("bpro_tbl_BBB"), showcase=biztime),
+                ui.value_box("Sum of load count", ui.output_ui("bpro_tbl_CCC"), showcase=wrench),
                 col_widths=[4, 4, 4],
                 fill=False,
                 title="overview"
             ),
             ui.card(
                 ui.card_header(
-                    ui.span(f"summary   ",
-                            ui.input_action_link("bpro_info_dt_compact", "", icon=info_fill, class_="float-right")
+                    ui.span(f"summary",
+                        ui.input_action_link("bpro_info_dt_compact", "",
+                            icon=info_fill, class_="ml-3 ")
                     ),
                     ui.input_switch('bpro_filter_dt_compact', 'Filter', False),
                     class_= "d-flex justify-content-between"
@@ -45,7 +46,7 @@ dlog_ui = ui.layout_sidebar(
                 ui.output_data_frame("bpro_tbl_dt_compact"),
                 ui.output_text("bpro_tbl_dt_compact_nodata_msg")
             ),
-            #ui.output_ui("bpro_ui_dt_detail"),
+            ui.output_ui("bpro_ui_dt_detail"),
         ),
         ###### ------ JOB ------ ######
         ui.nav_panel("Job Daily",
@@ -65,7 +66,19 @@ dlog_ui = ui.layout_sidebar(
             ui.tags.br(),
             ui.output_text_verbatim("job_txt_remove_result"),
         ),
-
+        ###### ------ Report ------ ######
+        ui.nav_panel("Report",
+            ui.markdown("""
+                press the button to start to make a report
+            """),
+            ### Do JOB
+            ui.tooltip(
+                ui.input_task_button("report_btn_create", "Create Report",  class_="mt-4"),
+                "Writing a report",
+            ),
+            ui.tags.br(),
+            ui.output_text_verbatim("report_txt_result"),
+        ),
         id = 'navset_tab_id'
     ),
 )

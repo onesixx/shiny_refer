@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 N = 1000
-
+###### ------ make random data
 area_range = ['Area_A', 'Area_B', 'Area_C', 'Area_D']
 random_area_ids = np.random.choice(area_range, size=N, replace=True)
 
@@ -20,7 +20,7 @@ for i in range(N):
     if end_times[i] <= start_times[i]:
         end_times[i] = (pd.to_datetime(start_times[i].strftime('%H:%M:%S')) + pd.Timedelta(minutes=np.random.randint(1, 60))).time()
 
-# 데이터프레임 생성
+####### ------ 데이터프레임 생성
 df = pd.DataFrame({
     'area_id': random_area_ids,
     'date': random_dates,
@@ -38,4 +38,5 @@ df['assign']  = df['duration'] * ratios[:, 0]
 df['acquire'] = df['duration'] * ratios[:, 1]
 df['deposit'] = df['duration'] * ratios[:, 2]
 
+###### ------ result
 df.to_csv('./sample_log.csv', index=False)

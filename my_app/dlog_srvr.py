@@ -61,21 +61,15 @@ def dlog_server(input, output, session):
                 ),
             )
     # ###### ------ Process ------ ######
-    # @render.ui
-    # @reactive.event(input.log_btn_fetch)
-    # def hello():
-    #     return ui.p(f"Hello", class_="fs-1 text-primary mt-3")
-
-
     @reactive.calc
     @reactive.event(input.log_btn_fetch)
     def bpro_loadData_all():
-        logger.info(f"PRESS FETCH")
+        # logger.info(f"PRESS FETCH")
         if not input.log_swh_show():
             duration_date = [input.job_day().strftime('%Y%m%d')]
         else:
             duration_date = [day.strftime('%Y%m%d') for day in input.job_dayrange()]
-        logger.info(f"duration_date : {duration_date}")
+        # logger.info(f"duration_date : {duration_date}")
 
         with ui.Progress(min=1, max=100) as p:
             p.set(detail = "This may take a while...")
@@ -117,8 +111,9 @@ def dlog_server(input, output, session):
     @reactive.calc
     def bpro_loadData():
         alldata = bpro_loadData_all()
-        logger.info(f"alldata : {alldata}")
+        # logger.info(f"alldata : {alldata}")
         selected_area = input.log_sel_area()
+
         ### ------ dt_compact ------ ###
         df_dt_compact = alldata[selected_area+'_dt_compact'] \
             if selected_area+'_dt_compact' in alldata.keys() else pd.DataFrame()
@@ -128,9 +123,13 @@ def dlog_server(input, output, session):
             if input.log_swh_show():
                 ddf = df_dt_compact.copy()
                 agg_dict = {
-                    "date", "sum",
+                    "load_cnt": "sum",
+                    "duration": "sum",
+                    "assign": "sum",
+                    "acquire": "sum",
+                    "deposit": "sum"
                 }
-                df_dt_compact = ddf.groupby('date').agg(agg_dict).round(2).reset_index()
+                df_dt_compact = ddf.groupby(['date', 'machine_id']).agg(agg_dict).round(2).reset_index()
         # logger.info(f"df_dt_compact : {df_dt_compact.shape}")
 
         ### ------ dt_detail ------ ###
@@ -138,7 +137,7 @@ def dlog_server(input, output, session):
             if selected_area+'_dt_detail' in alldata.keys() else pd.DataFrame()
         if df_dt_detail.empty:
             df_dt_detail = pd.DataFrame()
-        # logger.info(f"df_dt_detail : {df_dt_detail.shape}")
+        # logger.info(f"df_dt_detail : {df_dt_detail}")
 
         return df_dt_compact, df_dt_detail
 
@@ -155,50 +154,115 @@ def dlog_server(input, output, session):
             if not input.log_swh_show():
                 style=[
                     { "cols": [0,1,2], "class": "posit-blue-bg"},
-                    { "cols": [3,4,5], "class": "posit-green-bg"},
+                    { "cols": [4], "class": "posit-green-bg"},
                 ]
             else:
                 style=[
-                    { "cols": [0,1,2], "class": "posit-blue-bg"},
-                    { "cols": [3,4,5], "class": "posit-green-bg"},
+                    { "cols": [0,1], "class": "posit-blue-bg"},
+                    { "cols": [3], "class": "posit-green-bg"},
                 ]
             return render.DataGrid(dff,
-                selection_mode="row",
+                selection_mode='row',
                 width="100%",
                 filters=input.bpro_filter_dt_compact(),
-                # style=style
+                styles=style
             )
+        else:
+            return None
 
     @output
     @render.text
     def bpro_tbl_dt_compact_nodata_msg():
         df_dt_compact = bpro_loadData()[0]
-        logger.info(f"df_dt_compact : {df_dt_compact.shape}")
+        # logger.info(f"df_dt_compact : {df_dt_compact.shape}")
         if df_dt_compact.empty or df_dt_compact is None:
             return "No data available"
         return ""
 
+    @output
+    @render.ui
+    def bpro_tbl_AAA():
+        df_dt_compact = bpro_loadData()[0]
+        # logger.info(f"df_dt_compact : {df_dt_compact}")
+        if len(df_dt_compact) > 0:
+            avg_row = df_dt_compact['assign'].sum() / (df_dt_compact['assign'].sum() + df_dt_compact['acquire'].sum())
+            avg_row = (avg_row * 100).round(2)
+            # logger.info(f"avg_row : {avg_row}")
+        else:
+            avg_row = 0
+        return avg_row
 
-    # @render.ui
-    # def bpro_tbl_ds_facility_rate():
-    #     df_dt_compact = bpro_loadData()[1]
-    #     if len(df_dt_compact) > 0:
-    #         avg_row = df_dt_compact['assigned'].sum() / (df_dt_compact['assigned'].sum() + df_dt_compact['unassigned'].sum())
-    #         avg_row = (avg_row * 100).round(2)
-    #     else:
-    #         avg_row = 0
+    @output
+    @render.ui
+    def bpro_tbl_BBB():
+        df_dt_compact = bpro_loadData()[0]
+        if len(df_dt_compact) > 0:
+            avg_row = df_dt_compact['duration'].mean()
+            avg_row = avg_row.round(1)
+        else:
+            avg_row = 0
+        return avg_row
+
+    @output
+    @render.ui
+    def bpro_tbl_CCC():
+        df_dt_compact = bpro_loadData()[0]
+        if len(df_dt_compact) > 0:
+            avg_row = df_dt_compact['load_cnt'].sum()
+            avg_row = str(avg_row)
+        else:
+            avg_row = 0
+        return avg_row
+
+    @output
+    @render.data_frame
+    def bpro_tbl_dt_detail():
+        selected_row = bpro_tbl_dt_compact.cell_selection()['rows']
+        if len(selected_row) == 0:
+            return pd.DataFrame()
+        else:
+            selected_row_num = selected_row[0]   # selected_row : (3,)
+            selected_area_id = bpro_loadData()[0].iloc[selected_row_num]['area_id']
+            selected_date = bpro_loadData()[0].iloc[selected_row_num]['date']
+            selected_machine_id = bpro_loadData()[0].iloc[selected_row_num]['machine_id']
+
+            df_dt_detail = bpro_loadData()[1]
+
+            dff = df_dt_detail[
+                    (df_dt_detail['machine_id'] == selected_machine_id) &
+                    (df_dt_detail['date'] == selected_date) &
+                    (df_dt_detail['area_id'] == selected_area_id)
+                ]
+            if dff.shape[0] > 0:
+                return render.DataGrid(dff,
+                    width="fit-content",
+                    filters=input.bpro_filter_dt_detail(),
+                    styles =[
+                        { "cols": [0,1,2], "class": "posit-blue-bg"},
+                        { "cols": [7], "class": "posit-green-bg"},
+                    ]
+                )
 
 
+    @render.ui
+    @reactive.event(bpro_tbl_dt_compact.cell_selection)
+    def bpro_ui_dt_detail():
+        selected_rows = bpro_tbl_dt_compact.cell_selection()['rows']
+        if len(selected_rows) == 0:
+            return None
+        else:
+            selected_row_num = selected_rows[0]
+            return ui.card(
+                ui.card_header(
+                    ui.span(f"Detail of {selected_row_num}   ",
+                        ui.input_action_link("bpro_info_dt_detail", "", icon="info-fill", class_="float-right")
+                    ),
+                    ui.input_switch('bpro_filter_dt_detail', 'Filter', False),
+                    class_= "d-flex justify-content-between"
+                ),
+                ui.output_data_frame("bpro_tbl_dt_detail"),
+            )
 
-
-
-
-            # return render.DataGrid(dff,
-            #     selection_mode="row",
-            #     width="100%",
-            #     filters=input.bpro_ds_filter(),
-            #     style=style
-            # )
     ###### ------ JOB ------ ######
     @render.text
     @reactive.event(input.job_btn_jobdaily)

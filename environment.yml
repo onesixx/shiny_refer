@@ -17,3 +17,10 @@ dependencies:
   - scikit-learn
   - pyarrow
   - fastparquet
+
+  - vega_datasets
+  - duckdb
+
+  - pip
+  - pip:
+    - pydataset
