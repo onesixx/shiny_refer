@@ -1,0 +1,19 @@
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - numpy < 2
+  - shiny >= 1.0.0
+  - pandas
+  - matplotlib
+  - faicons
+  - seaborn
+  - ipywidgets
+  - Jinja2
+  - shinywidgets
+
+  - altair
+  - plotly
+  - scikit-learn
+  - pyarrow
+  - fastparquet
